@@ -7,37 +7,43 @@ import moment from "moment";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Calc() {
-  const [inputValue, setInputValue] = useState(0);
-  const [output, setOutput] = useState(inputValue);
-  const [transactions, setTransactions] = useState([]);
-  const notify = () => toast("it is negative value");
-  const format1 = "YYYY-MM-DDTHH:mm:ss";
-  var date = new Date();
+  const [currencyExpense, setCurrencyExpense] = useState(0);
+  const [currencyBalance, setCurrencyBalance] = useState(currencyExpense);
+  const [currencyTransactions, setCurrencyTransactions] = useState([]);
+
+  const showNegativeWarning = () => toast("It is negative value");
+  const transactionDateFormat = "YYYY-MM-DDTHH:mm:ss";
 
   const getTransaction = (operation) => {
     return {
-      date: moment(date).format(format1),
-      input: inputValue,
+      date: moment(new Date()).format(transactionDateFormat),
+      input: currencyExpense,
       operation: operation
     };
   };
 
-  const calculateTotal = (operation) => {
-    setOutput(output + inputValue);
-    setTransactions([...transactions, getTransaction(operation)]);
+  const calculateCredit = (operation) => {
+    setCurrencyBalance(currencyBalance + currencyExpense);
+    setCurrencyTransactions([
+      ...currencyTransactions,
+      getTransaction(operation)
+    ]);
   };
 
-  const calculateSubtract = (operation) => {
-    setOutput(output - inputValue);
-    if (output <= 0) {
-      setOutput(0);
-      notify();
+  const calculateDebit = (operation) => {
+    setCurrencyBalance(currencyBalance - currencyExpense);
+    if (currencyBalance <= 0) {
+      setCurrencyBalance(0);
+      showNegativeWarning();
     } else {
-      setTransactions([...transactions, getTransaction(operation)]);
+      setCurrencyTransactions([
+        ...currencyTransactions,
+        getTransaction(operation)
+      ]);
     }
   };
 
-  const operationButton = (label, action) => {
+  const transactionButton = (label, action) => {
     return (
       <Button
         className="operation-button"
@@ -56,21 +62,21 @@ export default function Calc() {
       <InputNumber
         className="input-box"
         min={0}
-        value={inputValue}
+        value={currencyExpense}
         type="number"
         onChange={(value) => {
-          setInputValue(parseInt(value));
+          setCurrencyExpense(parseInt(value));
         }}
       />
       <br />
-      {operationButton("Add", calculateTotal)}
-      {operationButton("Remove", calculateSubtract)}
+      {transactionButton("Add", calculateCredit)}
+      {transactionButton("Remove", calculateDebit)}
 
       <br />
-      <h1 className="balance-header">Balance:{output}</h1>
+      <h1 className="balance-header">Balance:{currencyBalance}</h1>
       <br />
       <ToastContainer position="top-center" theme="dark"></ToastContainer>
-      <Transaction transaction={transactions} />
+      <Transaction transaction={currencyTransactions} />
     </div>
   );
 }
