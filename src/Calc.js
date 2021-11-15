@@ -36,6 +36,21 @@ export default function Calc() {
       setTransactions([...transactions, getTransaction(operation)]);
     }
   };
+
+  const operationButton = (label, action) => {
+    return (
+      <Button
+        className="operation-button"
+        type="primary"
+        onClick={() => {
+          action(label);
+        }}
+      >
+        {label}
+      </Button>
+    );
+  };
+
   return (
     <div className="expense-tracker">
       <InputNumber
@@ -48,24 +63,9 @@ export default function Calc() {
         }}
       />
       <br />
-      <Button
-        type="primary"
-        className="operation-button"
-        onClick={() => {
-          calculateTotal("Add");
-        }}
-      >
-        Add
-      </Button>
-      <Button
-        className="operation-button"
-        type="primary"
-        onClick={() => {
-          calculateSubtract("Remove");
-        }}
-      >
-        Remove
-      </Button>
+      {operationButton("Add", calculateTotal)}
+      {operationButton("Remove", calculateSubtract)}
+
       <br />
       <h1 className="balance-header">Balance:{output}</h1>
       <br />
