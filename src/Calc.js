@@ -1,12 +1,11 @@
 import "./Transaction";
-
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 import { Button, InputNumber } from "antd";
 import Transaction from "./Transaction";
 import moment from "moment";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function Calc() {
   const [inputValue, setInputValue] = useState(0);
   const [output, setOutput] = useState(inputValue);
@@ -19,8 +18,7 @@ export default function Calc() {
     return {
       date: moment(date).format(format1),
       input: inputValue,
-
-      operation: operation,
+      operation: operation
     };
   };
 
@@ -39,37 +37,20 @@ export default function Calc() {
     }
   };
   return (
-    <div
-      style={{
-        textAlign: "center",
-        padding: 80,
-        position: "absolute",
-        left: 600,
-        top: 50,
-        backgroundColor: "blanchedalmond",
-        border: "2px dashed black",
-        borderRadius: 10,
-      }}
-    >
+    <div className="expense-tracker">
       <InputNumber
-        style={{ position: "relative", top: -15 }}
+        className="input-box"
         min={0}
         value={inputValue}
         type="number"
         onChange={(value) => {
           setInputValue(parseInt(value));
         }}
-      ></InputNumber>
+      />
       <br />
       <Button
         type="primary"
-        style={{
-          borderRadius: 7,
-          margin: 9,
-          position: "relative",
-          left: -40,
-          top: 15,
-        }}
+        className="operation-button"
         onClick={() => {
           calculateTotal("Add");
         }}
@@ -77,14 +58,8 @@ export default function Calc() {
         Add
       </Button>
       <Button
+        className="operation-button"
         type="primary"
-        style={{
-          borderRadius: 7,
-          margin: 9,
-          position: "relative",
-          right: -40,
-          top: 15,
-        }}
         onClick={() => {
           calculateSubtract("Remove");
         }}
@@ -92,7 +67,7 @@ export default function Calc() {
         Remove
       </Button>
       <br />
-      <h1 style={{ position: "relative", top: 35 }}>Balance:{output}</h1>
+      <h1 className="balance-header">Balance:{output}</h1>
       <br />
       <ToastContainer position="top-center" theme="dark"></ToastContainer>
       <Transaction transaction={transactions} />
