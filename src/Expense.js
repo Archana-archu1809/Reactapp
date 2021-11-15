@@ -1,37 +1,82 @@
-import { InputNumber } from "antd";
+import "./Transaction";
 import { useState } from "react";
-export default function Expense() {
-  const [num1, setNum1] = useState(0);
-  const [addValue, setAddValue] = useState("");
+import { ToastContainer, toast } from "react-toastify";
+import { Button, InputNumber } from "antd";
+import Transaction from "./Transaction";
+import moment from "moment";
+import "react-toastify/dist/ReactToastify.css";
+
+export default function ExpenseCalcuator() {
+  const [currencyExpense, setCurrencyExpense] = useState(0);
+  const [currencyBalance, setCurrencyBalance] = useState(currencyExpense);
+  const [currencyTransactions, setCurrencyTransactions] = useState([]);
+
+  const showNegativeWarning = () => toast("It is negative value");
+  const transactionDateFormat = "YYYY-MM-DDTHH:mm:ss";
+
   const getTransaction = (operation) => {
-    const transaction = {
-      date: new Date(),
-      input: { num1 },
-      balance: { addValue },
-      operation: operation,
+    return {
+      date: moment(new Date()).format(transactionDateFormat),
+      input: currencyExpense,
+      operation: operation
     };
-    return transaction;
   };
 
-  const Add = () => {
-    setAddValue(addValue + num1);
+  const calculateCredit = (operation) => {
+    setCurrencyBalance(currencyBalance + currencyExpense);
+    setCurrencyTransactions([
+      ...currencyTransactions,
+      getTransaction(operation)
+    ]);
   };
 
-  const remove = () => {
-    setAddValue(addValue - num1);
+  const calculateDebit = (operation) => {
+    setCurrencyBalance(currencyBalance - currencyExpense);
+    if (currencyBalance <= 0) {
+      setCurrencyBalance(0);
+      showNegativeWarning();
+    } else {
+      setCurrencyTransactions([
+        ...currencyTransactions,
+        getTransaction(operation)
+      ]);
+    }
   };
+
+  const transactionButton = (label, action) => {
+    return (
+      <Button
+        className="operation-button"
+        type="primary"
+        onClick={() => {
+          action(label);
+        }}
+      >
+        {label}
+      </Button>
+    );
+  };
+
   return (
-    <>
+    <div className="expense-tracker">
       <InputNumber
-        value={num1}
-        min="0"
+        className="input-box"
+        min={0}
+        value={currencyExpense}
         type="number"
-        onChange={(value) => setNum1(parseInt(value))}
+        onChange={(value) => {
+          setCurrencyExpense(parseInt(value));
+        }}
       />
       <br />
-      <button onClick={() => Add()}>Add</button>
-      <button onClick={() => remove()}>Remove</button>
-      {addValue}
-    </>
+      {transactionButton("Add", calculateCredit)}
+      {transactionButton("Remove", calculateDebit)}
+
+      <br />
+      <h1 className="balance-header">Balance:{currencyBalance}</h1>
+      <br />
+      <ToastContainer position="top-center" theme="dark"></ToastContainer>
+      <Transaction transaction={currencyTransactions} />
+    </div>
   );
 }
