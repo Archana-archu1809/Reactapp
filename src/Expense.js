@@ -11,13 +11,13 @@ export default function ExpenseCalcuator() {
   const [currencyBalance, setCurrencyBalance] = useState(currencyExpense);
   const [currencyTransactions, setCurrencyTransactions] = useState([]);
 
-  const showNegativeWarning = () => toast("It is negative value");
+  const showNegativeWarning = () => toast("Balance is zero.");
   const transactionDateFormat = "YYYY-MM-DDTHH:mm:ss";
 
   const getTransaction = (operation) => {
     return {
-      date: moment(new Date()).format(transactionDateFormat),
-      input: currencyExpense,
+      transaction_at: moment(new Date()).format(transactionDateFormat),
+      expense: currencyExpense,
       operation: operation
     };
   };
@@ -76,7 +76,7 @@ export default function ExpenseCalcuator() {
       <h1 className="balance-header">Balance:{currencyBalance}</h1>
       <br />
       <ToastContainer position="top-center" theme="dark"></ToastContainer>
-      <Transaction transaction={currencyTransactions} />
+      <Transaction currencyTransactions={currencyTransactions} />
     </div>
   );
 }

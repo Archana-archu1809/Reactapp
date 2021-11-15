@@ -1,22 +1,11 @@
-export default function Transaction({ transaction }) {
+export default function Transaction({ currencyTransactions }) {
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: 350,
-        left: 60,
-
-        textAlign: "center",
-        padding: "5px",
-        backgroundColor: "blanchedalmond",
-        border: "2px dashed black",
-        borderRadius: 10,
-      }}
-    >
+    <div className="transactions">
       <h1>Transaction</h1>
-      {transaction.map((transaction) => (
+      {currencyTransactions.map((transaction) => (
         <li>
-          {transaction.date}-{transaction.input}-{transaction.operation}
+          {transaction.transaction_at}-{transaction.expense}-
+          {transaction.operation}
         </li>
       ))}
     </div>

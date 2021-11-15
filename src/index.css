@@ -40,3 +40,13 @@ code {
   position: relative;
   top: 35px;
 }
+.expense-tracker .transactions {
+  position: absolute;
+  top: 350px;
+  left: 60px;
+  text-align: center;
+  padding: 5px;
+  background-color: blanchedalmond;
+  border: 2px dashed black;
+  border-radius: 10px;
+}
